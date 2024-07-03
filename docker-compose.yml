@@ -1,0 +1,25 @@
+services:
+  us-election-flask:
+    container_name: us_election_flask
+    restart: always
+    build: .
+    networks:
+      - us-election-db-network
+      - us-election-web-network
+  us-election-nginx:
+    container_name: us-election-nginx
+    restart: always
+    image: "nginx:latest"
+    ports:
+      - "5085:5085"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    networks:
+      - us-election-web-network
+    depends_on:
+      - us-election-flask
+networks:
+  us-election-db-network:
+    driver: bridge
+  us-election-web-network:
+    driver: bridge
